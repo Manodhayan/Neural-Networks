@@ -242,7 +242,7 @@ def L_model_forward(X, parameters):
     AL, cache = linear_activation_forward(A, parameters['W' + str(L)], parameters['b' + str(L)], activation = "sigmoid")
     caches.append(cache)
     
-    assert(AL.shape == (1,X.shape[1]))
+    #assert(AL.shape == (1,X.shape[1]))
             
     return AL, caches
 
@@ -264,7 +264,7 @@ def compute_cost(AL, Y):
     cost = (1./m) * (-np.dot(Y,np.log(AL).T) - np.dot(1-Y, np.log(1-AL).T))
     
     cost = np.squeeze(cost)      # To make sure your cost's shape is what we expect (e.g. this turns [[17]] into 17).
-    assert(cost.shape == ())
+    #assert(cost.shape == ())
     
     return cost
 
@@ -382,7 +382,7 @@ def update_parameters(parameters, grads, learning_rate):
         
     return parameters
 
-def predict(X, y, parameters):
+def predict(X, y, parameters,NumOutput):
     """
     This function is used to predict the results of a  L-layer neural network.
     
@@ -396,23 +396,23 @@ def predict(X, y, parameters):
     
     m = X.shape[1]
     n = len(parameters) // 2 # number of layers in the neural network
-    p = np.zeros((1,m))
+    p = np.zeros((NumOutput,m))
     
     # Forward propagation
     probas, caches = L_model_forward(X, parameters)
 
-    
+    for output_neuron in range(y.shape[0]):
     # convert probas to 0/1 predictions
-    for i in range(0, probas.shape[1]):
-        if probas[0,i] > 0.5:
-            p[0,i] = 1
-        else:
-            p[0,i] = 0
+        for i in range(probas.shape[1]):
+            if probas[output_neuron,i] > 0.5:
+                p[output_neuron,i] = 1
+            else:
+                p[output_neuron,i] = 0
     
     #print results
     #print ("predictions: " + str(p))
     #print ("true labels: " + str(y))
-    print("Accuracy: "  + str(np.sum((p == y)/m)))
+    print("Accuracy: "  + str(np.sum((p == y)/m)/NumOutput))
         
     return p
 
