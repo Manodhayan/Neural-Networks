@@ -401,7 +401,7 @@ def predict(X, y, parameters,NumOutput):
     # Forward propagation
     probas, caches = L_model_forward(X, parameters)
 
-    for output_neuron in range(y.shape[0]):
+    for output_neuron in range(NumOutput):
     # convert probas to 0/1 predictions
         for i in range(probas.shape[1]):
             if probas[output_neuron,i] > 0.5:
